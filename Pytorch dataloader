@@ -1,0 +1,24 @@
+class Siamese1(Dataset):
+    def __init__(self,train_df):
+        self.train_df=train_df
+      
+    def __len__(self):
+        return(len(self.train_df))
+    
+    def __getitem__(self,idx):
+        if torch.is_tensor(idx):
+            idx = idx.tolist()
+        i=random.randint(0,177)
+        j=random.randint(0,177)
+        img1=self.train_df.iloc[i,:]
+        img2=self.train_df.iloc[j,:]
+        
+                                
+        IMG1=img1.iloc[0:-1]
+        IMG2=img2.iloc[0:-1]
+        IMG1=np.array([IMG1])
+        IMG2=np.array([IMG2])
+        IMG1 = IMG1.astype('float')
+        IMG2 = IMG2.astype('float')
+                         
+        return  IMG1,IMG2,torch.from_numpy(np.array([img1['target']==img2['target']],dtype=np.float32))   
